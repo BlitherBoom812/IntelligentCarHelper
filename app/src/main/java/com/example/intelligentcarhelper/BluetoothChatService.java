@@ -16,6 +16,7 @@
 
 package com.example.intelligentcarhelper;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
@@ -170,6 +171,7 @@ public class BluetoothChatService {
      * @param socket The BluetoothSocket on which the connection was made
      * @param device The BluetoothDevice that has been connected
      */
+    @SuppressLint("MissingPermission")
     public synchronized void connected(BluetoothSocket socket, BluetoothDevice
             device, final String socketType) {
         Log.d(TAG, "connected, Socket Type:" + socketType);
@@ -203,7 +205,12 @@ public class BluetoothChatService {
         // Send the name of the connected device back to the UI Activity
         Message msg = mHandler.obtainMessage(Constants.MESSAGE_DEVICE_NAME);
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.DEVICE_NAME, device.getName());
+        try{
+            bundle.putString(Constants.DEVICE_NAME, device.getName());
+        } catch (SecurityException se){
+            Log.e(TAG, "connected() failed due to lack of permission", se);
+        }
+
         msg.setData(bundle);
         mHandler.sendMessage(msg);
         // Update UI title
@@ -265,7 +272,7 @@ public class BluetoothChatService {
         // Send a failure message back to the Activity
         Message msg = mHandler.obtainMessage(Constants.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.TOAST, "Unable to connect device");
+        bundle.putString(Constants.TOAST, "蓝牙连接失败");
         msg.setData(bundle);
         mHandler.sendMessage(msg);
 
@@ -284,7 +291,7 @@ public class BluetoothChatService {
         // Send a failure message back to the Activity
         Message msg = mHandler.obtainMessage(Constants.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.TOAST, "Device connection was lost");
+        bundle.putString(Constants.TOAST, "设备连接丢失");
         msg.setData(bundle);
         mHandler.sendMessage(msg);
 
@@ -306,6 +313,7 @@ public class BluetoothChatService {
         private final BluetoothServerSocket mmServerSocket;
         private String mSocketType;
 
+        @SuppressLint("MissingPermission")
         public AcceptThread(boolean secure) {
             BluetoothServerSocket tmp = null;
             mSocketType = secure ? "Secure" : "Insecure";
@@ -409,6 +417,8 @@ public class BluetoothChatService {
                 }
             } catch (IOException e) {
                 Log.e(TAG, "Socket Type: " + mSocketType + "create() failed", e);
+            } catch (SecurityException se){
+                Log.e(TAG, "Socket Type: " + mSocketType + "create() failed due to missing of permission", se);
             }
             mmSocket = tmp;
             mState = STATE_CONNECTING;
@@ -424,6 +434,8 @@ public class BluetoothChatService {
                         MY_UUID_SPP);
             } catch (IOException e) {
                 Log.e(TAG ,"create() failed" + e);
+            } catch (SecurityException se){
+                Log.e(TAG, "Socket Type: " + mSocketType + "create() failed due to missing of permission", se);
             }
             mmSocket = tmp;
             mState = STATE_CONNECTING;
@@ -433,8 +445,11 @@ public class BluetoothChatService {
             setName("ConnectThread" + mSocketType);
 
             // Always cancel discovery because it will slow down a connection
-            mAdapter.cancelDiscovery();
-
+            try{
+                mAdapter.cancelDiscovery();
+            } catch (SecurityException se){
+                Log.e(TAG, "Socket Type: " + mSocketType + "run() failed due to missing of permission", se);
+            }
             // Make a connection to the BluetoothSocket
             try {
                 // This is a blocking call and will only return on a
@@ -450,6 +465,8 @@ public class BluetoothChatService {
                 }
                 connectionFailed();
                 return;
+            } catch (SecurityException se){
+                Log.e(TAG, "Socket Type: " + mSocketType + "run() failed due to missing of permission", se);
             }
 
             // Reset the ConnectThread because we're done

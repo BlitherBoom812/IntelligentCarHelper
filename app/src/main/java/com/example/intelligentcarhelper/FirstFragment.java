@@ -1,6 +1,7 @@
 package com.example.intelligentcarhelper;
 
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,9 +30,9 @@ import com.example.intelligentcarhelper.databinding.FragmentFirstBinding;
     target:
     完成蓝牙连接ui(get)
     通过对话框显示可连接的蓝牙列表(get)
-    显示蓝牙连接状态：未连接时显示"蓝牙未连接"，已连接时显示蓝牙名称
-    断开蓝牙：在右上角添加断开蓝牙按钮
-    接收消息：接受小车发回的蓝牙消息
+    显示蓝牙连接状态：未连接时显示"蓝牙未连接"，已连接时显示蓝牙名称(get)
+    断开蓝牙：在右上角添加断开蓝牙按钮(get)
+    接收消息：接受小车发回的蓝牙消息(get)
     语音控制：通过语音发送蓝牙消息。
  */
 
@@ -46,6 +48,8 @@ public class FirstFragment extends Fragment {
     private Button ButtonLeft;
     private Button ButtonRight;
     private Button ButtonBack;
+
+    private ListView mConversationView;
 
     /**
      * Name of the connected device
@@ -85,7 +89,7 @@ public class FirstFragment extends Fragment {
         // If the adapter is null, then Bluetooth is not supported
         FragmentActivity activity = getActivity();
         if (mBluetoothAdapter == null && activity != null) {
-            Toast.makeText(activity, "Bluetooth is not available", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, R.string.bt_not_enabled_leaving, Toast.LENGTH_LONG).show();
             activity.finish();
         }
     }
@@ -108,6 +112,7 @@ public class FirstFragment extends Fragment {
         ButtonLeft = view.findViewById(R.id.button_left);
         ButtonRight = view.findViewById(R.id.button_right);
         ButtonBack = view.findViewById(R.id.button_back);
+        mConversationView = view.findViewById(R.id.in);
     }
 
     private void setupChat(){
@@ -118,9 +123,10 @@ public class FirstFragment extends Fragment {
         if (activity == null) {
             return;
         }
-        //mConversationArrayAdapter = new ArrayAdapter<>(activity, R.layout.message);
+        mConversationArrayAdapter = new ArrayAdapter<>(activity, R.layout.message);
 //
-//        mConversationView.setAdapter(mConversationArrayAdapter);
+        mConversationView.setAdapter(mConversationArrayAdapter);
+        mConversationArrayAdapter.add("hello bluetooth");
 //
 //        // Initialize the compose field with a listener for the return key
 //        mOutEditText.setOnEditorActionListener(mWriteListener);
@@ -209,15 +215,15 @@ public class FirstFragment extends Fragment {
                 case Constants.MESSAGE_STATE_CHANGE:
                     switch (msg.arg1) {
                         case BluetoothChatService.STATE_CONNECTED:
-                            //setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
-                            //mConversationArrayAdapter.clear();
+                            setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
+                            mConversationArrayAdapter.clear();
                             break;
                         case BluetoothChatService.STATE_CONNECTING:
-                            //setStatus(R.string.title_connecting);
+                            setStatus(R.string.title_connecting);
                             break;
                         case BluetoothChatService.STATE_LISTEN:
                         case BluetoothChatService.STATE_NONE:
-                            //setStatus(R.string.title_not_connected);
+                            setStatus(R.string.title_not_connected);
                             break;
                     }
                     break;
@@ -225,19 +231,19 @@ public class FirstFragment extends Fragment {
                     byte[] writeBuf = (byte[]) msg.obj;
                     // construct a string from the buffer
                     String writeMessage = new String(writeBuf);
-                    //mConversationArrayAdapter.add("Me:  " + writeMessage);
+                    mConversationArrayAdapter.add("我:  " + writeMessage);
                     break;
                 case Constants.MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf, 0, msg.arg1);
-                    //mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
+                    mConversationArrayAdapter.add(mConnectedDeviceName + ":  " + readMessage);
                     break;
                 case Constants.MESSAGE_DEVICE_NAME:
                     // save the connected device's name
                     mConnectedDeviceName = msg.getData().getString(Constants.DEVICE_NAME);
                     if (null != activity) {
-                        Toast.makeText(activity, "Connected to "
+                        Toast.makeText(activity, "已连接到"
                                 + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
                     }
                     break;
@@ -251,6 +257,31 @@ public class FirstFragment extends Fragment {
         }
     };
 
+    /**
+     * Updates the status on the action bar.
+     *
+     * @param subTitle status
+     */
+    private void setStatus(CharSequence subTitle) {
+        TextView info = binding.textviewInfo;
+        if (null == info) {
+            return;
+        }
+        info.setText(subTitle);
+    }
+
+    /**
+     * Updates the status on the action bar.
+     *
+     * @param resId a string resource ID
+     */
+    private void setStatus(int resId) {
+        TextView info = binding.textviewInfo;
+        if (null == info) {
+            return;
+        }
+        info.setText(resId);
+    }
 
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -300,13 +331,16 @@ public class FirstFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings: {
+            case R.id.action_connect: {
                 Log.i(TAG, "start intent list bluetooth");
                 // Launch the DeviceListActivity to see devices and do scan
                 Intent serverIntent = new Intent(getActivity(), DeviceListActivity.class);
                 startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SPP);
                 return true;
             }
+            case R.id.action_disconnect:
+                mChatService.stop();
+                return true;
         }
         return false;
     }

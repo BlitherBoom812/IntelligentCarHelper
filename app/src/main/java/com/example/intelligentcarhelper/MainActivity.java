@@ -27,10 +27,10 @@ import android.view.MenuItem;
 /*
     功能设计：搜索并连接蓝牙，发送指令。可以通过按键或者语音。
     具体实现：
-    1.右上角的导航栏可以搜索蓝牙；
+    1.右上角的导航栏可以搜索蓝牙；(get)
     2.右下角的按键可以实现语音控制
-    3.屏幕中间显示连接蓝牙的名称
-    4.屏幕下方的按键控制左转，右转，直行，后退
+    3.屏幕中间显示连接蓝牙的名称(get)
+    4.屏幕下方的按键控制左转，右转，直行，后退(get)
     5.右上角的导航栏显示调试信息
 
  */
@@ -78,11 +78,11 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-
-        }
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//
+//        }
 
         return super.onOptionsItemSelected(item);
     }
