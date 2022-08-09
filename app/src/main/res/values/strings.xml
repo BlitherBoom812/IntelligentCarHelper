@@ -257,5 +257,7 @@
         <item>http://gz.voicecloud.cn/msp.do</item>
         <item>http://dx.xf-yun.com/msp.do</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

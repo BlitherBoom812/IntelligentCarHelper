@@ -24,6 +24,7 @@ import android.view.View;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -60,7 +61,13 @@ import java.util.LinkedHashMap;
     4.屏幕下方的按键控制左转，右转，直行，后退(get)
     5.显示调试信息(get)
 
-
+    调整结构：根据MVC模型
+    主要功能应该放在MainActivity中。蓝牙连接功能应当随着MainActivity的周期存在。按键功能也是如此。
+    MainActivity设置公用方法SendMessage，供其他Fragment使用。
+    语音功能可以放在一个Fragment中，通过Result返回信息。
+    FirstFragment只用于承担显示信息功能，包括蓝牙状态和调试信息。
+    ButtonFragment用于控制按键。
+    GravityFragment用于控制感应，显示手机状态信息。
  */
 
 public class MainActivity extends AppCompatActivity {
@@ -113,11 +120,13 @@ public class MainActivity extends AppCompatActivity {
         // 设置标点符号,设置为"0"返回结果无标点,设置为"1"返回结果有标点
         mIat.setParameter(SpeechConstant.ASR_PTT, "0");
 
-
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(this::startSpeechClick);
     }
 
+    public void sendMessage(String msg){
+        showTip(msg);
+    }
 
     public void startSpeechClick(View view) {
         //Toast.makeText(MainActivity.this, "Start Speech", Toast.LENGTH_LONG).show();
