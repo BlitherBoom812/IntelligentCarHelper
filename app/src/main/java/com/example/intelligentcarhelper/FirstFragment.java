@@ -25,6 +25,19 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.intelligentcarhelper.databinding.FragmentFirstBinding;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.iflytek.cloud.RecognizerListener;
+import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechRecognizer;
+import com.iflytek.cloud.SpeechUtility;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 /*
     target:
@@ -76,13 +89,15 @@ public class FirstFragment extends Fragment {
      */
     private BluetoothChatService mChatService = null;
 
-
     private FragmentFirstBinding binding;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
         // Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -92,6 +107,7 @@ public class FirstFragment extends Fragment {
             Toast.makeText(activity, R.string.bt_not_enabled_leaving, Toast.LENGTH_LONG).show();
             activity.finish();
         }
+
     }
 
     @Override
@@ -124,25 +140,8 @@ public class FirstFragment extends Fragment {
             return;
         }
         mConversationArrayAdapter = new ArrayAdapter<>(activity, R.layout.message);
-//
+
         mConversationView.setAdapter(mConversationArrayAdapter);
-        mConversationArrayAdapter.add("hello bluetooth");
-//
-//        // Initialize the compose field with a listener for the return key
-//        mOutEditText.setOnEditorActionListener(mWriteListener);
-//
-//        // Initialize the send button with a listener that for click events
-//        mSendButton.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                // Send a message using content of the edit text widget
-//                View view = getView();
-//                if (null != view) {
-//                    TextView textView = view.findViewById(R.id.edit_text_out);
-//                    String message = textView.getText().toString();
-//                    sendMessage(message);
-//                }
-//            }
-//        });
 
         ButtonFront.setOnClickListener(new View.OnClickListener() {
             @Override

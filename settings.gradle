@@ -8,3 +8,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "IntelligentCarHelper"
 include ':app'
+include ':speechDemo'
