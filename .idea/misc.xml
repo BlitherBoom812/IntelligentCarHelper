@@ -9,13 +9,26 @@
         <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/drawable/list_bg_color.xml" value="0.141" />
         <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/layout/activity_device_list.xml" value="0.1" />
         <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/layout/activity_face_identify.xml" value="0.1" />
+        <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/layout/activity_group_manager.xml" value="0.18055555555555555" />
         <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/layout/activity_main.xml" value="0.2857142857142857" />
+        <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/layout/activity_result_identify.xml" value="0.18055555555555555" />
         <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/layout/content_main.xml" value="0.2857142857142857" />
         <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/layout/device_name.xml" value="0.1" />
         <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/layout/fragment_button.xml" value="0.1296875" />
         <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/layout/fragment_first.xml" value="0.2857142857142857" />
         <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/layout/fragment_second.xml" value="0.2755208333333333" />
+        <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/layout/group_header_layout.xml" value="0.18055555555555555" />
+        <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/layout/iatdemo.xml" value="0.18055555555555555" />
+        <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/layout/ifly_layout_mnotice_image.xml" value="0.18055555555555555" />
+        <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/layout/isvdemo.xml" value="0.1" />
+        <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/layout/item_group.xml" value="0.18055555555555555" />
+        <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/layout/item_identify_result.xml" value="0.18055555555555555" />
+        <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/layout/list_items.xml" value="0.18055555555555555" />
+        <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/layout/main.xml" value="0.12291666666666666" />
         <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/layout/message.xml" value="0.1" />
+        <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/layout/title.xml" value="0.18055555555555555" />
+        <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/layout/ttsdemo.xml" value="0.18055555555555555" />
+        <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/layout/understander.xml" value="0.18055555555555555" />
         <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/menu/menu_main.xml" value="0.2755208333333333" />
         <entry key="..\:/developer/IntelligentCarHelper/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
       </map>

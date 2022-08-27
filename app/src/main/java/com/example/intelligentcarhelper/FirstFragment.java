@@ -12,6 +12,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -46,7 +47,7 @@ import java.util.LinkedHashMap;
     显示蓝牙连接状态：未连接时显示"蓝牙未连接"，已连接时显示蓝牙名称(get)
     断开蓝牙：在右上角添加断开蓝牙按钮(get)
     接收消息：接受小车发回的蓝牙消息(get)
-    语音控制：通过语音发送蓝牙消息。
+    语音控制：通过语音发送蓝牙消息。(get)
  */
 
 public class FirstFragment extends Fragment {
@@ -143,11 +144,32 @@ public class FirstFragment extends Fragment {
 
         mConversationView.setAdapter(mConversationArrayAdapter);
 
-        ButtonFront.setOnClickListener(new View.OnClickListener() {
+//        ButtonFront.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                sendMessage(getResources().getText(R.string.front).toString());
+//            }
+//        });
+        ButtonFront.setOnTouchListener(new View.OnTouchListener(){
             @Override
-            public void onClick(View v) {
-                sendMessage(getResources().getText(R.string.front).toString());
+            public boolean onTouch(View v, MotionEvent motionEvent){
+                Log.i(TAG, "Touched");
+
+                switch (motionEvent.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        Log.i(TAG, "Up");
+                        Toast.makeText(activity, "Up", Toast.LENGTH_LONG);
+
+                        sendMessage(getResources().getText(R.string.stop).toString());
+                        break;
+                    case MotionEvent.ACTION_DOWN:
+                        Log.i(TAG, "Down");
+                        Toast.makeText(activity, "Down", Toast.LENGTH_LONG);
+                        sendMessage(getResources().getText(R.string.front).toString());
+                }
+                return false;
             }
+
         });
 
         ButtonLeft.setOnClickListener(new View.OnClickListener() {
@@ -164,12 +186,28 @@ public class FirstFragment extends Fragment {
             }
         });
 
-        ButtonBack.setOnClickListener(new View.OnClickListener() {
+        ButtonBack.setOnTouchListener(new View.OnTouchListener(){
             @Override
-            public void onClick(View v) {
-                sendMessage(getResources().getText(R.string.back).toString());
+            public boolean onTouch(View v, MotionEvent motionEvent){
+                //Log.i(TAG, "Touched");
+
+                switch (motionEvent.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        //Log.i(TAG, "Up");
+                        //Toast.makeText(activity, "Up", Toast.LENGTH_LONG).show();
+
+                        sendMessage(getResources().getText(R.string.stop).toString());
+                        break;
+                    case MotionEvent.ACTION_DOWN:
+                        //Log.i(TAG, "Down");
+                        //Toast.makeText(activity, "Down", Toast.LENGTH_LONG).show();
+                        sendMessage(getResources().getText(R.string.back).toString());
+                }
+                return false;
             }
+
         });
+
 
         // Initialize the BluetoothChatService to perform bluetooth connections
         mChatService = new BluetoothChatService(activity, mHandler);
@@ -185,6 +223,7 @@ public class FirstFragment extends Fragment {
      * @param message A string of text to send.
      */
     private void sendMessage(String message) {
+
         // Check that we're actually connected before trying anything
         if (mChatService.getState() != BluetoothChatService.STATE_CONNECTED) {
             Toast.makeText(getActivity(), R.string.not_connected, Toast.LENGTH_SHORT).show();
