@@ -19,6 +19,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 
@@ -56,11 +57,12 @@ import java.util.LinkedHashMap;
     功能设计：搜索并连接蓝牙，发送指令。可以通过按键或者语音。
     具体实现：
     1.右上角的导航栏可以搜索蓝牙；(get)
-    2.右下角的按键可以实现语音控制(语音识别模块已经完成)
+    2.右下角的按键可以实现语音控制(语音识别部分已经完成)
     3.屏幕中间显示连接蓝牙的名称(get)
     4.屏幕下方的按键控制左转，右转，直行，后退(get)
     5.显示调试信息(get)
 
+    (以后再整，没时间了)
     调整结构：根据MVC模型
     主要功能应该放在MainActivity中。蓝牙连接功能应当随着MainActivity的周期存在。按键功能也是如此。
     MainActivity设置公用方法SendMessage，供其他Fragment使用。
@@ -86,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
     // hashmap to store result
     private HashMap<String, String> mIatResults = new LinkedHashMap<String, String>();
 
+    public Handler mHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -210,6 +213,11 @@ public class MainActivity extends AppCompatActivity {
             resultBuffer.append(mIatResults.get(key));
         }
         Toast.makeText(MainActivity.this, resultBuffer.toString(), Toast.LENGTH_LONG).show();
+        Message msg = mHandler.obtainMessage(Constants.SEND_SPEECH_RESULT);
+        Bundle b = new Bundle();
+        b.putString(Constants.RESULT, resultBuffer.toString());
+        msg.setData(b);
+        mHandler.sendMessage(msg);
     }
 
     @Override

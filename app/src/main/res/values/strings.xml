@@ -36,9 +36,10 @@
 
     <!--command -->
     <string name="front">1</string>
-    <string name="left">2</string>
-    <string name="right">3</string>
-    <string name="back">4</string>
+    <string name="back">2</string>
+    <string name="left">3</string>
+    <string name="right">4</string>
+
 
     <string name="app_id">6d48c100</string>
     <string name="example_explain">本示例为讯飞语音Android平台开发者提供语音听写、语法识别、语义理解和语音合成等代码样例，旨在让用户能够依据该示例快速开发出基于语音接口的应用程序。</string>

@@ -91,8 +91,8 @@ public class FirstFragment extends Fragment {
 
     private FragmentFirstBinding binding;
 
-
-
+    //if the time between two speeches is less than 2 seconds, then only output the former.
+    long speech_mills = 0;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,7 +107,7 @@ public class FirstFragment extends Fragment {
             Toast.makeText(activity, R.string.bt_not_enabled_leaving, Toast.LENGTH_LONG).show();
             activity.finish();
         }
-
+        ((MainActivity)activity).mHandler = mHandler;
     }
 
     @Override
@@ -252,10 +252,29 @@ public class FirstFragment extends Fragment {
                                 Toast.LENGTH_SHORT).show();
                     }
                     break;
+                case Constants.SEND_SPEECH_RESULT:
+                    //Toast.makeText(activity, "Receive Speech Result", Toast.LENGTH_LONG).show();
+                    String b = msg.getData().getString(Constants.RESULT);
+                    if(System.currentTimeMillis() - speech_mills >= 500){
+                        FirstFragment.this.speechResultPraser(b);
+                    }
+                    speech_mills = System.currentTimeMillis();
+                    break;
             }
         }
     };
 
+    private void speechResultPraser(String result){
+        if(result.contains("前")){
+            sendMessage(getResources().getText(R.string.front).toString());
+        }else if(result.contains("后")){
+            sendMessage(getResources().getText(R.string.back).toString());
+        }else if(result.contains("左")){
+            sendMessage(getResources().getText(R.string.left).toString());
+        }else if(result.contains("右")){
+            sendMessage(getResources().getText(R.string.right).toString());
+        }
+    }
     /**
      * Updates the status on the action bar.
      *
