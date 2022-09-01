@@ -62,6 +62,7 @@ public class FirstFragment extends Fragment {
     private Button ButtonLeft;
     private Button ButtonRight;
     private Button ButtonBack;
+    private Button ButtonStop;
 
     private ListView mConversationView;
 
@@ -129,6 +130,7 @@ public class FirstFragment extends Fragment {
         ButtonLeft = view.findViewById(R.id.button_left);
         ButtonRight = view.findViewById(R.id.button_right);
         ButtonBack = view.findViewById(R.id.button_back);
+        ButtonStop = view.findViewById(R.id.button_stop);
         mConversationView = view.findViewById(R.id.in);
     }
 
@@ -153,59 +155,52 @@ public class FirstFragment extends Fragment {
         ButtonFront.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View v, MotionEvent motionEvent){
-                Log.i(TAG, "Touched");
-
-                switch (motionEvent.getAction()){
-                    case MotionEvent.ACTION_UP:
-                        Log.i(TAG, "Up");
-                        Toast.makeText(activity, "Up", Toast.LENGTH_LONG);
-
-                        sendMessage(getResources().getText(R.string.stop).toString());
-                        break;
-                    case MotionEvent.ACTION_DOWN:
-                        Log.i(TAG, "Down");
-                        Toast.makeText(activity, "Down", Toast.LENGTH_LONG);
-                        sendMessage(getResources().getText(R.string.front).toString());
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                    sendMessage(getResources().getText(R.string.front).toString());
                 }
                 return false;
             }
 
         });
 
-        ButtonLeft.setOnClickListener(new View.OnClickListener() {
+        ButtonLeft.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                sendMessage(getResources().getText(R.string.left).toString());
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    sendMessage(getResources().getString(R.string.left));
+                }
+                return false;
             }
         });
 
-        ButtonRight.setOnClickListener(new View.OnClickListener() {
+        ButtonRight.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                sendMessage(getResources().getText(R.string.right).toString());
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    sendMessage(getResources().getString(R.string.right));
+                }
+                return false;
             }
         });
 
         ButtonBack.setOnTouchListener(new View.OnTouchListener(){
             @Override
             public boolean onTouch(View v, MotionEvent motionEvent){
-                //Log.i(TAG, "Touched");
-
-                switch (motionEvent.getAction()){
-                    case MotionEvent.ACTION_UP:
-                        //Log.i(TAG, "Up");
-                        //Toast.makeText(activity, "Up", Toast.LENGTH_LONG).show();
-
-                        sendMessage(getResources().getText(R.string.stop).toString());
-                        break;
-                    case MotionEvent.ACTION_DOWN:
-                        //Log.i(TAG, "Down");
-                        //Toast.makeText(activity, "Down", Toast.LENGTH_LONG).show();
-                        sendMessage(getResources().getText(R.string.back).toString());
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                    sendMessage(getResources().getText(R.string.back).toString());
                 }
                 return false;
             }
+        });
 
+        ButtonStop.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){
+                    sendMessage(getResources().getText(R.string.stop).toString());
+                }
+                return false;
+            }
         });
 
 
@@ -312,6 +307,8 @@ public class FirstFragment extends Fragment {
             sendMessage(getResources().getText(R.string.left).toString());
         }else if(result.contains("右")){
             sendMessage(getResources().getText(R.string.right).toString());
+        }else if(result.contains("停")){
+            sendMessage(getResources().getString(R.string.stop));
         }
     }
     /**

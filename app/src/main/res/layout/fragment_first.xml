@@ -28,18 +28,20 @@
         app:layout_constraintTop_toBottomOf="@id/textview_info" />
 
     <Button
-        android:id="@+id/button_left"
-        android:layout_width="wrap_content"
+        android:id="@+id/button_right"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="左转"
+        android:layout_marginStart="16dp"
+        android:text="右转"
         app:layout_constraintStart_toEndOf="@+id/button_front"
         app:layout_constraintTop_toBottomOf="@+id/button_front" />
 
     <Button
-        android:id="@+id/button_right"
-        android:layout_width="wrap_content"
+        android:id="@+id/button_left"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="右转"
+        android:layout_marginEnd="16dp"
+        android:text="左转"
         app:layout_constraintEnd_toStartOf="@+id/button_front"
         app:layout_constraintTop_toBottomOf="@+id/button_front" />
 
@@ -60,5 +62,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button_back"></ListView>
+
+    <Button
+        android:id="@+id/button_stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="停止"
+        app:layout_constraintBottom_toTopOf="@+id/button_back"
+        app:layout_constraintEnd_toStartOf="@+id/button_right"
+        app:layout_constraintStart_toEndOf="@+id/button_left"
+        app:layout_constraintTop_toBottomOf="@+id/button_front" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
