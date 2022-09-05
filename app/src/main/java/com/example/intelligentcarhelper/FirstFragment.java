@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,27 +19,16 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.example.intelligentcarhelper.databinding.FragmentFirstBinding;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.iflytek.cloud.RecognizerListener;
-import com.iflytek.cloud.RecognizerResult;
-import com.iflytek.cloud.SpeechConstant;
-import com.iflytek.cloud.SpeechError;
-import com.iflytek.cloud.SpeechRecognizer;
-import com.iflytek.cloud.SpeechUtility;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 /*
     target:
@@ -57,12 +47,22 @@ public class FirstFragment extends Fragment {
     private static final int REQUEST_ENABLE_BT = 0;
     private static final int REQUEST_CONNECT_DEVICE_SPP = 1;
 
+    //about
+
+    AlertDialog dialog;
+
     //Layout Views
     private Button ButtonFront;
     private Button ButtonLeft;
     private Button ButtonRight;
     private Button ButtonBack;
     private Button ButtonStop;
+
+    private Switch SwitchMode;
+
+    //mode for button, true for press mode, false for state mode
+
+    private boolean isPressMode;
 
     private ListView mConversationView;
 
@@ -108,7 +108,18 @@ public class FirstFragment extends Fragment {
         if (mBluetoothAdapter == null && activity != null) {
             Toast.makeText(activity, R.string.bt_not_enabled_leaving, Toast.LENGTH_LONG).show();
             activity.finish();
-        }
+        };
+
+        // 1. Instantiate an <code><a href="/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a></code> with its constructor
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+// 2. Chain together various setter methods to set the dialog characteristics
+        builder.setMessage(R.string.string_about)
+                .setTitle(R.string.about_title);
+
+// 3. Get the <code><a href="/reference/android/app/AlertDialog.html">AlertDialog</a></code> from <code><a href="/reference/android/app/AlertDialog.Builder.html#create()">create()</a></code>
+        dialog = builder.create();
+
         ((MainActivity)activity).mHandler = mHandler;
     }
 
@@ -131,6 +142,9 @@ public class FirstFragment extends Fragment {
         ButtonRight = view.findViewById(R.id.button_right);
         ButtonBack = view.findViewById(R.id.button_back);
         ButtonStop = view.findViewById(R.id.button_stop);
+
+        SwitchMode = view.findViewById(R.id.switch_mode);
+
         mConversationView = view.findViewById(R.id.in);
     }
 
@@ -158,6 +172,11 @@ public class FirstFragment extends Fragment {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN){
                     sendMessage(getResources().getText(R.string.front).toString());
                 }
+                if(isPressMode){
+                    if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                        sendMessage(getResources().getText(R.string.stop).toString());
+                    }
+                }
                 return false;
             }
 
@@ -169,6 +188,11 @@ public class FirstFragment extends Fragment {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     sendMessage(getResources().getString(R.string.left));
                 }
+                if(isPressMode){
+                    if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                        sendMessage(getResources().getText(R.string.stop).toString());
+                    }
+                }
                 return false;
             }
         });
@@ -178,6 +202,11 @@ public class FirstFragment extends Fragment {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     sendMessage(getResources().getString(R.string.right));
+                }
+                if(isPressMode){
+                    if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                        sendMessage(getResources().getText(R.string.stop).toString());
+                    }
                 }
                 return false;
             }
@@ -189,6 +218,12 @@ public class FirstFragment extends Fragment {
                 if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
                     sendMessage(getResources().getText(R.string.back).toString());
                 }
+                if(isPressMode){
+                    if(motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                        sendMessage(getResources().getText(R.string.stop).toString());
+                    }
+                }
+
                 return false;
             }
         });
@@ -203,6 +238,13 @@ public class FirstFragment extends Fragment {
             }
         });
 
+        SwitchMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                isPressMode = SwitchMode.isChecked();
+                Log.i(TAG, "Press Mode: " + isPressMode);
+            }
+        });
 
         // Initialize the BluetoothChatService to perform bluetooth connections
         mChatService = new BluetoothChatService(activity, mHandler);
@@ -395,6 +437,10 @@ public class FirstFragment extends Fragment {
             case R.id.action_disconnect:
                 mChatService.stop();
                 return true;
+            case R.id.action_about:
+                Toast.makeText(getActivity(), "About", Toast.LENGTH_LONG).show();
+
+                dialog.show();
         }
         return false;
     }

@@ -1,8 +1,19 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">智能小车助手</string>
+
     <string name="action_connect">连接蓝牙...</string>
     <string name="action_disconnect">断开连接</string>
+    <string name="action_about">关于</string>
 
+    <string name="string_about">
+        在手机中与要连接的蓝牙模块配对后，在右上角选择连接蓝牙（也可以在手机上直接连接蓝牙）。\n\n
+        按键模式关闭时，采用状态模式：前进、后退、左转、右转、停止按下后，分别发送字符串1,2,3,4,5.\n\n
+        按键模式打开时，按下前后左右按钮则发送运动指令，松开后发送停止指令。\n\n
+        右下角的语音识别按钮，按下后发出语音“前进、后退、向左、向右、停止”，可以转换成状态模式下的指令进行发送。\n\n
+        author: Guoyun Tian\n
+        仅供2022年硬件设计大赛自平衡小车使用，不作任何商业用途。如有雷同纯属巧合。
+    </string>
+    <string name="about_title">关于</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">智能小车助手</string>
     <string name="second_fragment_label">Second Fragment</string>
